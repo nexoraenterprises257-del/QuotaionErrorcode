@@ -426,6 +426,7 @@ export function QuotationBuilder({
               <label className="block">
                 <span className="field-label">Client Name</span>
                 <input
+                  id="field-client-name"
                   className="field-input"
                   value={data.client.clientName}
                   placeholder="Enter client name"
@@ -436,6 +437,7 @@ export function QuotationBuilder({
               <label className="block">
                 <span className="field-label">Company Name</span>
                 <input
+                  id="field-company-name"
                   className="field-input"
                   value={data.client.companyName}
                   placeholder="Enter company name"
@@ -460,6 +462,7 @@ export function QuotationBuilder({
                   </button>
                 </div>
                 <input
+                  id="field-proposal-number"
                   className="field-input"
                   value={data.client.proposalNumber}
                   placeholder="NEX/2026/001"
@@ -484,6 +487,7 @@ export function QuotationBuilder({
                   </button>
                 </div>
                 <input
+                  id="field-proposal-date"
                   className="field-input"
                   value={data.client.date}
                   placeholder="DD/MM/YYYY"
