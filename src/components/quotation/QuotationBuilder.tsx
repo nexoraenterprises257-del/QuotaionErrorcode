@@ -712,23 +712,13 @@ export function QuotationBuilder({
                   onFocus={() => flashFocus("manager:card")}
                 />
               </label>
-              <label className="block">
+              <label className="block sm:col-span-2">
                 <span className="field-label">Mobile Number</span>
                 <input
                   className="field-input"
                   value={data.manager.mobile}
                   placeholder="+91 81759 50586"
                   onChange={(e) => setManager("mobile", e.target.value)}
-                  onFocus={() => flashFocus("manager:card")}
-                />
-              </label>
-              <label className="block">
-                <span className="field-label">Email Address</span>
-                <input
-                  className="field-input"
-                  value={data.manager.email}
-                  placeholder="support@nexoracpaas.in"
-                  onChange={(e) => setManager("email", e.target.value)}
                   onFocus={() => flashFocus("manager:card")}
                 />
               </label>
