@@ -871,8 +871,17 @@ table.pg-table td.final {
     min-width: 0 !important;
     max-width: 100% !important;
     padding: 12px !important;
-    padding-bottom: 76px !important;
+    padding-bottom: 140px !important;
     border-right: none !important;
+  }
+
+  .left-panel::after {
+    content: "";
+    display: block;
+    height: 100px;
+    width: 100%;
+    pointer-events: none;
+    flex-shrink: 0;
   }
 
   .right-panel {
