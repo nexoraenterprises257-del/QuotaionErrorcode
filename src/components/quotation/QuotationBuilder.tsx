@@ -725,8 +725,8 @@ export function QuotationBuilder({
             </div>
           </div>
 
-          {/* Dedicated mobile bottom breathing room so Account Manager is never flush against bottom bar */}
-          <div className="h-28 md:h-8 w-full shrink-0 select-none pointer-events-none" aria-hidden="true" />
+          {/* Subtle little space so Account Manager is not flush against bottom bar */}
+          <div className="h-4 md:h-0 w-full shrink-0 select-none pointer-events-none" aria-hidden="true" />
         </div>
 
         {/* =================================================================== */}
