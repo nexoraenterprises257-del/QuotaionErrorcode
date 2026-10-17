@@ -15,9 +15,11 @@ import {
   PenLine,
   Sparkles,
   Calendar,
+  Zap,
 } from "lucide-react";
 import { QuotationDocument } from "@/components/quotation/QuotationDocument";
 import { PreviewFocusContext } from "@/components/quotation/preview-focus";
+import { SmsErrorHub } from "@/components/error-hub/SmsErrorHub";
 import {
   defaultQuotation,
   generateProposalNumber,
@@ -46,8 +48,38 @@ export const PRODUCT_NAMES: Record<ProductKey, string> = {
   smpp: "SMPP Bind",
 };
 
-export function QuotationBuilder() {
+export function QuotationBuilder({
+  initialProduct = "quotation",
+}: {
+  initialProduct?: "quotation" | "errorHub";
+} = {}) {
   const [data, setData] = useState<Quotation>(defaultQuotation);
+
+  const [activeProduct, setActiveProduct] = useState<"quotation" | "errorHub">(() => {
+    if (typeof window !== "undefined") {
+      const p =
+        new URLSearchParams(window.location.search).get("product") ||
+        new URLSearchParams(window.location.search).get("tab");
+      if (p === "error-hub" || p === "errorHub" || initialProduct === "errorHub") {
+        return "errorHub";
+      }
+    }
+    return initialProduct;
+  });
+
+  const handleProductSwitch = (prod: "quotation" | "errorHub") => {
+    setActiveProduct(prod);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      if (prod === "errorHub") {
+        url.searchParams.set("product", "error-hub");
+      } else {
+        url.searchParams.delete("product");
+        url.searchParams.delete("tab");
+      }
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
 
   const [openKey, setOpenKey] = useState<ProductKey | null>(null);
   const [activeCard, setActiveCard] = useState<string | null>(null);
@@ -242,7 +274,7 @@ export function QuotationBuilder() {
       {/* ===================================================================== */}
       {/*                              TOP BAR                                  */}
       {/* ===================================================================== */}
-      <header className="topbar no-print bg-[#1e1b4b] text-white">
+      <header className="topbar no-print bg-[#1e1b4b] text-white flex items-center justify-between px-3 sm:px-6 py-2.5 z-40 shadow-md">
         <div className="flex items-center gap-3">
           <img
             src="/nexora-logo.png"
@@ -252,41 +284,84 @@ export function QuotationBuilder() {
               (e.currentTarget as HTMLImageElement).src = "/nexora-logo.png";
             }}
           />
-          <span className="text-lg font-bold tracking-tight text-white">
+          <span className="text-lg font-bold tracking-tight text-white hidden lg:inline">
             Nexora <span className="gradient-text font-black">Enterprise</span>
           </span>
         </div>
 
-        <div className="flex items-center gap-4 sm:gap-6">
-          <span className="text-xs font-semibold text-slate-300 hidden sm:inline" id="headerStats">
-            {enabledCount} products · {pageCount} pages
-          </span>
-
+        {/* 2-PRODUCT NAVIGATION SWITCHER */}
+        <div className="flex items-center bg-slate-900/90 p-1 rounded-xl border border-white/10 shadow-inner">
           <button
             type="button"
-            onClick={resetDefaults}
-            title="Reset to default Nexora proposal"
-            className="hidden sm:inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-700 transition cursor-pointer"
+            id="nav-quotation-builder-btn"
+            onClick={() => handleProductSwitch("quotation")}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              activeProduct === "quotation"
+                ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/30"
+                : "text-slate-300 hover:text-white hover:bg-white/5"
+            }`}
           >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset</span>
+            <FileText className="w-3.5 h-3.5" />
+            <span>Quotation Builder</span>
           </button>
-
           <button
             type="button"
-            onClick={exportPDF}
-            className="flex items-center gap-2 bg-slate-100 hover:bg-white text-slate-800 text-xs font-bold px-4 py-2 rounded-lg transition cursor-pointer shadow-sm active:scale-95"
+            id="nav-sms-error-hub-btn"
+            onClick={() => handleProductSwitch("errorHub")}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              activeProduct === "errorHub"
+                ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/30"
+                : "text-slate-300 hover:text-white hover:bg-white/5"
+            }`}
           >
-            <Printer className="w-3.5 h-3.5 text-indigo-700" />
-            <span>Export PDF</span>
+            <Zap className="w-3.5 h-3.5 text-amber-300" />
+            <span>SMS Error Hub</span>
+            <span className="text-[10px] bg-cyan-400/20 text-cyan-300 px-1.5 py-0.2 rounded-full font-mono font-bold">1212</span>
           </button>
         </div>
+
+        {/* RIGHT SIDE ACTIONS */}
+        {activeProduct === "quotation" ? (
+          <div className="flex items-center gap-3 sm:gap-5">
+            <span className="text-xs font-semibold text-slate-300 hidden xl:inline" id="headerStats">
+              {enabledCount} products · {pageCount} pages
+            </span>
+
+            <button
+              type="button"
+              onClick={resetDefaults}
+              title="Reset to default Nexora proposal"
+              className="hidden sm:inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-700 transition cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={exportPDF}
+              className="flex items-center gap-2 bg-slate-100 hover:bg-white text-slate-800 text-xs font-bold px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg transition cursor-pointer shadow-sm active:scale-95"
+            >
+              <Printer className="w-3.5 h-3.5 text-indigo-700" />
+              <span>Export PDF</span>
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-cyan-300 bg-cyan-950/60 border border-cyan-500/30 px-3 py-1 rounded-lg hidden sm:inline-flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+              1,212 SMS &amp; DLT Codes
+            </span>
+          </div>
+        )}
       </header>
 
       {/* ===================================================================== */}
-      {/*                            MAIN ROW                                   */}
+      {/*                            MAIN CONTENT                               */}
       {/* ===================================================================== */}
-      <div className="main-row flex-1 flex min-h-0 overflow-hidden">
+      {activeProduct === "quotation" ? (
+        <>
+          <div className="main-row flex-1 flex min-h-0 overflow-hidden">
         {/* =================================================================== */}
         {/*                           LEFT PANEL                                */}
         {/* =================================================================== */}
@@ -733,6 +808,12 @@ export function QuotationBuilder() {
           <span>Preview</span>
         </button>
       </div>
+    </>
+  ) : (
+    <div className="flex-1 overflow-y-auto">
+      <SmsErrorHub />
     </div>
+  )}
+</div>
   );
 }
