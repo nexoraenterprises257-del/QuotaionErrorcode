@@ -745,7 +745,20 @@ table.pg-table td.final {
 }
 
 /* ============ NETLIFY APP SHELL & LEFT PANEL CONTROLS ============ */
+.app-shell {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
 .topbar {
+  position: sticky !important;
+  top: 0 !important;
   flex-shrink: 0;
   background: #1e1b4b !important;
   color: #fff !important;
@@ -753,7 +766,7 @@ table.pg-table td.final {
   align-items: center;
   justify-content: space-between;
   padding: 10px 22px;
-  z-index: 40;
+  z-index: 50;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 }
 

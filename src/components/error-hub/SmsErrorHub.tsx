@@ -205,7 +205,7 @@ export function SmsErrorHub() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col font-sans transition-colors duration-200 ${
+      className={`min-h-full flex-1 flex flex-col font-sans transition-colors duration-200 ${
         isDark
           ? "bg-[#070B14] text-slate-100"
           : "bg-slate-50 text-slate-900"

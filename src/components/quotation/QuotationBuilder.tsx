@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -70,6 +71,12 @@ export function QuotationBuilder({
   const handleProductSwitch = (prod: "quotation" | "errorHub") => {
     setActiveProduct(prod);
     if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      const shell = document.querySelector(".app-shell");
+      if (shell) shell.scrollTop = 0;
+
       const url = new URL(window.location.href);
       if (prod === "errorHub") {
         url.searchParams.set("product", "error-hub");
@@ -121,6 +128,8 @@ export function QuotationBuilder({
     if (!el) return;
 
     const apply = () => {
+      // Guard against zero/collapsed dimensions when hidden
+      if (el.clientWidth <= 100) return;
       const availW = el.clientWidth - 48; // padding
       const availH = el.clientHeight - 48;
 
@@ -139,7 +148,34 @@ export function QuotationBuilder({
     const ro = new ResizeObserver(apply);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [zoom]);
+  }, [zoom, activeProduct]);
+
+  /* Reset scroll and recalibrate scale on tab switch */
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      const shell = document.querySelector(".app-shell");
+      if (shell) shell.scrollTop = 0;
+    }
+    if (activeProduct === "quotation") {
+      const t = setTimeout(() => {
+        const el = scrollerRef.current;
+        if (!el || el.clientWidth <= 100) return;
+        const availW = el.clientWidth - 48;
+        const availH = el.clientHeight - 48;
+        if (zoom === "fit-width") {
+          setScale(Math.min(1.2, Math.max(0.35, availW / PAGE_W)));
+        } else if (zoom === "fit-page") {
+          const sw = availW / PAGE_W;
+          const sh = availH / PAGE_H;
+          setScale(Math.min(1.2, Math.max(0.35, Math.min(sw, sh))));
+        }
+      }, 60);
+      return () => clearTimeout(t);
+    }
+  }, [activeProduct, zoom]);
 
   /* ---------------- Preview Navigation & Focus ---------------- */
   const scrollToPage = useCallback((pageId: string) => {
@@ -270,11 +306,11 @@ export function QuotationBuilder({
   };
 
   return (
-    <div className="app-shell h-screen bg-[#eef1f6] flex flex-col font-sans text-slate-900 overflow-hidden">
+    <div className="app-shell fixed inset-0 w-full h-full bg-[#eef1f6] flex flex-col font-sans text-slate-900 overflow-hidden">
       {/* ===================================================================== */}
       {/*                              TOP BAR                                  */}
       {/* ===================================================================== */}
-      <header className="topbar no-print bg-[#1e1b4b] text-white flex items-center justify-between px-3 sm:px-6 py-2.5 z-40 shadow-md">
+      <header className="topbar no-print sticky top-0 shrink-0 bg-[#1e1b4b] text-white flex items-center justify-between px-3 sm:px-6 py-2.5 z-50 shadow-md">
         <div className="flex items-center gap-3">
           <img
             src="/nexora-logo.png"
@@ -359,9 +395,7 @@ export function QuotationBuilder({
       {/* ===================================================================== */}
       {/*                            MAIN CONTENT                               */}
       {/* ===================================================================== */}
-      {activeProduct === "quotation" ? (
-        <>
-          <div className="main-row flex-1 flex min-h-0 overflow-hidden">
+      <div className={`main-row flex-1 flex min-h-0 overflow-hidden ${activeProduct === "quotation" ? "" : "hidden"}`}>
         {/* =================================================================== */}
         {/*                           LEFT PANEL                                */}
         {/* =================================================================== */}
@@ -790,7 +824,7 @@ export function QuotationBuilder({
       </div>
 
       {/* MOBILE TAB BAR */}
-      <div className="m-tabbar md:hidden no-print">
+      <div className={`m-tabbar md:hidden no-print ${activeProduct === "quotation" ? "" : "hidden"}`}>
         <button
           type="button"
           className={mobileTab === "edit" ? "active" : ""}
@@ -808,12 +842,11 @@ export function QuotationBuilder({
           <span>Preview</span>
         </button>
       </div>
-    </>
-  ) : (
-    <div className="flex-1 overflow-y-auto">
-      <SmsErrorHub />
+
+      {/* SMS ERROR HUB PRODUCT */}
+      <div className={`flex-1 min-h-0 overflow-y-auto ${activeProduct === "errorHub" ? "" : "hidden"}`}>
+        <SmsErrorHub />
+      </div>
     </div>
-  )}
-</div>
   );
 }
