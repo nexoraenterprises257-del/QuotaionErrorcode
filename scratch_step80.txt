@@ -1,0 +1,159 @@
+Created At: 2026-10-16T11:34:34+05:30
+Completed At: 2026-10-16T11:34:34+05:30
+File Path: `file:///c:/Users/Immense/Downloads/immensesolutions-quotes-main%20%281%29/immensesolutions-quotes-main/src/components/quotation/QuotationBuilder.tsx`
+Total Lines: 828
+Total Bytes: 38002
+Showing lines 1 to 150
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+2: import { QuotationDocument } from "@/components/quotation/QuotationDocument";
+3: import { PreviewFocusContext } from "@/components/quotation/preview-focus";
+4: import {
+5:   PRODUCT_LABELS,
+6:   computeTotal,
+7:   defaultQuotation,
+8:   type Product,
+9:   type Quotation,
+10: } from "@/lib/quotation";
+11: 
+12: const MM = 96 / 25.4;
+13: const PAGE_W = 210 * MM;
+14: const PAGE_H = 297 * MM;
+15: 
+16: function Field({
+17:   label,
+18:   value,
+19:   onChange,
+20:   onFocusPreview,
+21:   type = "text",
+22: }: {
+23:   label: string;
+24:   value: string;
+25:   onChange: (v: string) => void;
+26:   onFocusPreview?: () => void;
+27:   type?: string;
+28: }) {
+29:   return (
+30:     <label className="block">
+31:       <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-brand-ink/60">
+32:         {label}
+33:       </span>
+34:       <input
+35:         type={type}
+36:         value={value}
+37:         onFocus={onFocusPreview}
+38:         onChange={(e) => {
+39:           onChange(e.target.value);
+40:           onFocusPreview?.();
+41:         }}
+42:         className="w-full rounded-lg border border-brand-line bg-white px-3 py-2 text-sm text-navy outline-none transition-all placeholder:text-brand-ink/35 focus:border-navy focus:ring-4 focus:ring-navy/10"
+43:       />
+44:     </label>
+45:   );
+46: }
+47: 
+48: function EyeButton({ onClick, title }: { onClick: () => void; title: string }) {
+49:   return (
+50:     <button
+51:       type="button"
+52:       onClick={onClick}
+53:       title={title}
+54:       aria-label={title}
+55:       className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-brand-line bg-white text-brand-ink/60 transition-colors hover:border-navy hover:text-navy"
+56:     >
+57:       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+58:         <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
+59:         <circle cx="12" cy="12" r="3" />
+60:       </svg>
+61:     </button>
+62:   );
+63: }
+64: 
+65: function Card({
+66:   title,
+67:   subtitle,
+68:   children,
+69:   right,
+70:   innerRef,
+71:   active,
+72: }: {
+73:   title: string;
+74:   subtitle?: string;
+75:   children: React.ReactNode;
+76:   right?: React.ReactNode;
+77:   innerRef?: (el: HTMLElement | null) => void;
+78:   active?: boolean;
+79: }) {
+80:   return (
+81:     <section
+82:       ref={innerRef}
+83:       className={`fade-up scroll-mt-24 rounded-2xl border bg-white p-5 shadow-panel transition-colors ${
+84:         active ? "border-navy/60 ring-4 ring-navy/10" : "border-brand-line"
+85:       }`}
+86:     >
+87:       <header className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
+88:         <div className="min-w-0">
+89:           <h2 className="truncate text-base font-semibold text-navy">{title}</h2>
+90:           {subtitle ? <p className="mt-0.5 text-xs text-brand-ink/60">{subtitle}</p> : null}
+91:         </div>
+92:         {right}
+93:       </header>
+94:       {children}
+95:     </section>
+96:   );
+97: }
+98: 
+99: function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
+100:   return (
+101:     <button
+102:       type="button"
+103:       role="switch"
+104:       aria-checked={on}
+105:       onClick={() => onChange(!on)}
+106:       className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-300 ${
+107:         on ? "bg-navy" : "bg-brand-line"
+108:       }`}
+109:     >
+110:       <span
+111:         className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all duration-300 ${
+112:           on ? "left-[22px]" : "left-0.5"
+113:         }`}
+114:       />
+115:     </button>
+116:   );
+117: }
+118: 
+119: type ZoomMode = number | "fit-width" | "fit-page";
+120: 
+121: export function QuotationBuilder() {
+122:   const [data, setData] = useState<Quotation>(defaultQuotation);
+123:   const [openKey, setOpenKey] = useState<string | null>("cpaas");
+124:   const [highlight, setHighlight] = useState<string | null>(null);
+125:   const [activeSection, setActiveSection] = useState<string | null>(null);
+126:   const [zoom, setZoom] = useState<ZoomMode>("fit-width");
+127:   const [scale, setScale] = useState(1);
+128: 
+129:   const scrollerRef = useRef<HTMLDivElement>(null);
+130:   const editorRefs = useRef<Record<string, HTMLElement | null>>({});
+131:   const glowTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+132: 
+133:   useEffect(() => {
+134:     setData((d) =>
+135:       d.client.date
+136:         ? d
+137:         : { ...d, client: { ...d.client, date: new Date().toLocaleDateString("en-GB") } },
+138:     );
+139:   }, []);
+140: 
+141:   /* ------------------------------- zoom ------------------------------- */
+142:   useLayoutEffect(() => {
+143:     const el = scrollerRef.current;
+144:     if (!el) return;
+145:     const apply = () => {
+146:       if (typeof zoom === "number") return setScale(zoom);
+147:       const w = (el.clientWidth - 48) / PAGE_W;
+148:       if (zoom === "fit-width") return setScale(Math.min(1.5, Math.max(0.2, w)));
+149:       const h = (el.clientHeight - 48) / PAGE_H;
+150:       setScale(Math.min(1.5, Math.max(0.2, Math.min(w, h))));
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+

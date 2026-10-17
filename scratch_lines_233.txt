@@ -1,0 +1,75 @@
+Created At: 2026-10-16T11:49:46+05:30
+Completed At: 2026-10-16T11:49:46+05:30
+File Path: `file:///c:/Users/Immense/Downloads/immensesolutions-quotes-main%20%281%29/immensesolutions-quotes-main/src/components/quotation/QuotationBuilder.tsx`
+Total Lines: 830
+Total Bytes: 38100
+Showing lines 740 to 805
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+740:         {/* -------- Sticky live A4 preview -------- */}
+741:         <div className="min-w-0 lg:sticky lg:top-[76px]">
+742:           <div className="no-print mb-3 flex flex-wrap items-center justify-between gap-3">
+743:             <h2 className="text-sm font-semibold text-navy">Live A4 Preview</h2>
+744:             <div className="flex items-center gap-1.5">
+745:               {([50, 75, 100] as const).map((z) => (
+746:                 <ZoomBtn key={z} active={zoom === z / 100} onClick={() => setZoom(z / 100)}>
+747:                   {z}%
+748:                 </ZoomBtn>
+749:               ))}
+750:               <ZoomBtn active={zoom === "fit-width"} onClick={() => setZoom("fit-width")}>
+751:                 Fit Width
+752:               </ZoomBtn>
+753:               <ZoomBtn active={zoom === "fit-page"} onClick={() => setZoom("fit-page")}>
+754:                 Fit Page
+755:               </ZoomBtn>
+756:             </div>
+757:           </div>
+758: 
+759:           <div className="relative">
+760:             <div
+761:               id="print-root"
+762:               ref={scrollerRef}
+763:               className="preview-scroller overflow-auto rounded-2xl bg-brand-grey lg:h-[calc(100vh-140px)]"
+764:             >
+765:               <div
+766:                 className="page-scaler flex flex-col items-center gap-6 py-3"
+767:                 style={{ zoom: scale }}
+768:               >
+769:                 <PreviewFocusContext.Provider value={{ highlight, onSelect }}>
+770:                   <QuotationDocument data={data} />
+771:                 </PreviewFocusContext.Provider>
+772:               </div>
+773:             </div>
+774: 
+775:             {/* floating page navigator */}
+776:             <nav className="no-print absolute right-3 top-3 max-h-[70%] w-[150px] overflow-auto rounded-xl border border-brand-line bg-white/95 p-1.5 shadow-panel backdrop-blur">
+777:               {pages.map((pg) => (
+778:                 <button
+779:                   key={pg.id}
+780:                   type="button"
+781:                   onClick={() => goToPage(pg.id)}
+782:                   className="flex w-full items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-left text-xs font-medium text-brand-ink/75 transition-colors hover:bg-blue-50 hover:text-blue-600"
+783:                 >
+784:                   <svg
+785:                     width="12"
+786:                     height="12"
+787:                     viewBox="0 0 24 24"
+788:                     fill="none"
+789:                     stroke="currentColor"
+790:                     strokeWidth="2"
+791:                     className="shrink-0 opacity-60"
+792:                   >
+793:                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+794:                     <path d="M14 2v6h6" />
+795:                   </svg>
+796:                   <span className="truncate">{pg.label}</span>
+797:                 </button>
+798:               ))}
+799:             </nav>
+800:           </div>
+801:         </div>
+802:       </div>
+803:     </div>
+804:   );
+805: }
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+

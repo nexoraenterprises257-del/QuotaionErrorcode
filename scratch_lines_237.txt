@@ -1,0 +1,225 @@
+Created At: 2026-10-16T11:49:55+05:30
+Completed At: 2026-10-16T11:49:55+05:30
+File Path: `file:///c:/Users/Immense/Downloads/immensesolutions-quotes-main%20%281%29/immensesolutions-quotes-main/src/components/quotation/QuotationBuilder.tsx`
+Total Lines: 830
+Total Bytes: 38100
+Showing lines 520 to 735
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+520:                                         type="text"
+521:                                         placeholder="Rate"
+522:                                         value={t.rateValue}
+523:                                         onFocus={() => focusPreview(`${p.key}:pricing`)}
+524:                                         onChange={(e) =>
+525:                                           patchProduct(p.key, {
+526:                                             tables: p.tables.map((x, j) =>
+527:                                               j === i ? { ...x, rateValue: e.target.value } : x,
+528:                                             ),
+529:                                           })
+530:                                         }
+531:                                         className="w-full rounded-md border border-brand-line bg-white px-2.5 py-1.5 text-xs font-medium text-navy outline-none focus:border-navy"
+532:                                       />
+533:                                     </div>
+534:                                   </div>
+535:                                 </div>
+536:                               ))}
+537:                             </div>
+538:                           </div>
+539: 
+540:                           <div className="rounded-lg border border-brand-line/70 bg-white p-3 space-y-3">
+541:                             <p className="text-[11px] font-semibold uppercase tracking-wider text-brand-ink/60">
+542:                               Total Agent Limit Section (Optional)
+543:                             </p>
+544:                             <div className="grid grid-cols-2 gap-2">
+545:                               <div>
+546:                                 <span className="mb-1 block text-[10px] font-semibold uppercase text-brand-ink/60">
+547:                                   Header Title
+548:                                 </span>
+549:                                 <input
+550:                                   type="text"
+551:                                   placeholder="Total Agent Limit"
+552:                                   value={p.agentLimitLabel ?? "Total Agent Limit"}
+553:                                   onFocus={() => focusPreview(`${p.key}:pricing`)}
+554:                                   onChange={(e) =>
+555:                                     patchProduct(p.key, { agentLimitLabel: e.target.value })
+556:                                   }
+557:                                   className="w-full rounded-md border border-brand-line bg-white px-2.5 py-1.5 text-xs text-navy outline-none focus:border-navy"
+558:                                 />
+559:                               </div>
+560:                               <div>
+561:                                 <span className="mb-1 block text-[10px] font-semibold uppercase text-brand-ink/60">
+562:                                   Limit Value
+563:                                 </span>
+564:                                 <input
+565:                                   type="text"
+566:                                   placeholder="e.g. Unlimited or 5 (Leave empty to hide)"
+567:                                   value={p.agentLimitValue ?? ""}
+568:                                   onFocus={() => focusPreview(`${p.key}:pricing`)}
+569:                                   onChange={(e) =>
+570:                                     patchProduct(p.key, { agentLimitValue: e.target.value })
+571:                                   }
+572:                                   className="w-full rounded-md border border-brand-line bg-white px-2.5 py-1.5 text-xs font-medium text-navy outline-none focus:border-navy"
+573:                                 />
+574:                               </div>
+575:                             </div>
+576:                           </div>
+577: 
+578:                           <div className="rounded-lg bg-white p-3 space-y-3">
+579:                             <p className="text-[11px] font-semibold uppercase tracking-wider text-brand-ink/60">
+580:                               Summary Pricing Table & Header Labels (Optional)
+581:                             </p>
+582:                             <div className="grid grid-cols-2 gap-3">
+583:                               <Field
+584:                                 label="Setup Header Title"
+585:                                 value={p.pricing.setupLabel || "Setup Charges"}
+586:                                 onFocusPreview={() => focusPreview(`${p.key}:pricing`)}
+587:                                 onChange={(v) =>
+588:                                   patchProduct(p.key, { pricing: { ...p.pricing, setupLabel: v } })
+589:                                 }
+590:                               />
+591:                               <Field
+592:                                 label="Setup Charges Value"
+593:                                 value={p.pricing.setup}
+594:                                 onFocusPreview={() => focusPreview(`${p.key}:pricing`)}
+595:                                 onChange={(v) =>
+596:                                   patchProduct(p.key, { pricing: { ...p.pricing, setup: v } })
+597:                                 }
+598:                               />
+599: 
+600:                               <Field
+601:                                 label="Monthly Header Title"
+602:                                 value={p.pricing.monthlyLabel || "Monthly Charges"}
+603:                                 onFocusPreview={() => focusPreview(`${p.key}:pricing`)}
+604:                                 onChange={(v) =>
+605:                                   patchProduct(p.key, { pricing: { ...p.pricing, monthlyLabel: v } })
+606:                                 }
+607:                               />
+608:                               <Field
+609:                                 label="Monthly Charges Value"
+610:                                 value={p.pricing.monthly}
+611:                                 onFocusPreview={() => focusPreview(`${p.key}:pricing`)}
+612:                                 onChange={(v) =>
+613:                                   patchProduct(p.key, { pricing: { ...p.pricing, monthly: v } })
+614:                                 }
+615:                               />
+616: 
+617:                               <Field
+618:                                 label="Price Header Title"
+619:                                 value={p.pricing.priceLabel || "Price"}
+620:                                 onFocusPreview={() => focusPreview(`${p.key}:pricing`)}
+621:                                 onChange={(v) =>
+622:                                   patchProduct(p.key, { pricing: { ...p.pricing, priceLabel: v } })
+623:                                 }
+624:                               />
+625:                               <Field
+626:                                 label="Price Value"
+627:                                 value={p.pricing.price}
+628:                                 onFocusPreview={() => focusPreview(`${p.key}:pricing`)}
+629:                                 onChange={(v) =>
+630:                                   patchProduct(p.key, { pricing: { ...p.pricing, price: v } })
+631:                                 }
+632:                               />
+633: 
+634:                               <Field
+635:                                 label="GST Header Title"
+636:                                 value={p.pricing.gstLabel || "GST (%)"}
+637:                                 onFocusPreview={() => focusPreview(`${p.key}:pricing`)}
+638:                                 onChange={(v) =>
+639:                                   patchProduct(p.key, { pricing: { ...p.pricing, gstLabel: v } })
+640:                                 }
+641:                               />
+642:                               <Field
+643:                                 label="GST (%) Value"
+644:                                 value={p.pricing.gst}
+645:                                 onFocusPreview={() => focusPreview(`${p.key}:pricing`)}
+646:                                 onChange={(v) =>
+647:                                   patchProduct(p.key, { pricing: { ...p.pricing, gst: v } })
+648:                                 }
+649:                               />
+650: 
+651:                               <Field
+652:                                 label="Total Header Title"
+653:                                 value={p.pricing.totalLabel || "Final Total"}
+654:                                 onFocusPreview={() => focusPreview(`${p.key}:pricing`)}
+655:                                 onChange={(v) =>
+656:                                   patchProduct(p.key, { pricing: { ...p.pricing, totalLabel: v } })
+657:                                 }
+658:                               />
+659:                               <Field
+660:                                 label="Final Total (0 = Auto)"
+661:                                 value={p.pricing.total}
+662:                                 onFocusPreview={() => focusPreview(`${p.key}:pricing`)}
+663:                                 onChange={(v) =>
+664:                                   patchProduct(p.key, { pricing: { ...p.pricing, total: v } })
+665:                                 }
+666:                               />
+667:                             </div>
+668:                             <p className="mt-1.5 text-xs text-brand-ink/60">
+669:                               Auto total: ₹{" "}
+670:                               {computeTotal(p.pricing).toLocaleString("en-IN", {
+671:                                 maximumFractionDigits: 2,
+672:                               })}
+673:                             </p>
+674:                           </div>
+675: 
+676:                           <label className="block">
+677:                             <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-brand-ink/60">
+678:                               Bullet Points (one per line)
+679:                             </span>
+680:                             <textarea
+681:                               rows={6}
+682:                               value={p.bullets.join("\n")}
+683:                               onFocus={() => focusPreview(`${p.key}:bullets`)}
+684:                               onChange={(e) => {
+685:                                 patchProduct(p.key, { bullets: e.target.value.split("\n") });
+686:                                 focusPreview(`${p.key}:bullets`);
+687:                               }}
+688:                               className="w-full rounded-lg border border-brand-line bg-white px-3 py-2 text-sm text-navy outline-none focus:border-navy focus:ring-4 focus:ring-navy/10"
+689:                             />
+690:                           </label>
+691:                         </div>
+692:                       </div>
+693:                     </div>
+694:                   </div>
+695:                 );
+696:               })}
+697:             </div>
+698:           </Card>
+699: 
+700:           <Card
+701:             title="Account Manager"
+702:             subtitle="Shown on the final Contact Us page"
+703:             innerRef={setEditorRef("manager")}
+704:             active={activeSection === "manager"}
+705:             right={
+706:               <EyeButton title="Preview contact page" onClick={() => focusPreview("manager:card")} />
+707:             }
+708:           >
+709:             <div className="grid gap-3 sm:grid-cols-2">
+710:               <Field
+711:                 label="Name"
+712:                 value={data.manager.name}
+713:                 onFocusPreview={() => focusPreview("manager:card")}
+714:                 onChange={(v) => setData((d) => ({ ...d, manager: { ...d.manager, name: v } }))}
+715:               />
+716:               <Field
+717:                 label="Designation"
+718:                 value={data.manager.designation}
+719:                 onFocusPreview={() => focusPreview("manager:card")}
+720:                 onChange={(v) =>
+721:                   setData((d) => ({ ...d, manager: { ...d.manager, designation: v } }))
+722:                 }
+723:               />
+724:               <Field
+725:                 label="Mobile Number"
+726:                 value={data.manager.mobile}
+727:                 onFocusPreview={() => focusPreview("manager:card")}
+728:                 onChange={(v) => setData((d) => ({ ...d, manager: { ...d.manager, mobile: v } }))}
+729:               />
+730:               <Field
+731:                 label="Email Address"
+732:                 value={data.manager.email}
+733:                 onFocusPreview={() => focusPreview("manager:card")}
+734:                 onChange={(v) => setData((d) => ({ ...d, manager: { ...d.manager, email: v } }))}
+735:               />
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+

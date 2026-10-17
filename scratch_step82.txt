@@ -1,0 +1,159 @@
+Created At: 2026-10-16T11:34:38+05:30
+Completed At: 2026-10-16T11:34:38+05:30
+File Path: `file:///c:/Users/Immense/Downloads/immensesolutions-quotes-main%20%281%29/immensesolutions-quotes-main/src/components/quotation/QuotationBuilder.tsx`
+Total Lines: 828
+Total Bytes: 38002
+Showing lines 151 to 300
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+151:     };
+152:     apply();
+153:     const ro = new ResizeObserver(apply);
+154:     ro.observe(el);
+155:     return () => ro.disconnect();
+156:   }, [zoom]);
+157: 
+158:   /* ---------------------- preview navigation --------------------- */
+159:   const scrollPreviewTo = useCallback((el: HTMLElement | null) => {
+160:     const scroller = scrollerRef.current;
+161:     if (!el || !scroller) return;
+162:     const top =
+163:       el.getBoundingClientRect().top -
+164:       scroller.getBoundingClientRect().top +
+165:       scroller.scrollTop -
+166:       scroller.clientHeight / 2 +
+167:       el.getBoundingClientRect().height / 2;
+168:     scroller.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+169:   }, []);
+170: 
+171:   const focusPreview = useCallback(
+172:     (focusId: string) => {
+173:       const scroller = scrollerRef.current;
+174:       if (!scroller) return;
+175:       const el = scroller.querySelector<HTMLElement>(`[data-focus="${focusId}"]`);
+176:       if (!el) return;
+177:       scrollPreviewTo(el);
+178:       setHighlight(focusId);
+179:       if (glowTimer.current) clearTimeout(glowTimer.current);
+180:       glowTimer.current = setTimeout(() => setHighlight(null), 2000);
+181:     },
+182:     [scrollPreviewTo],
+183:   );
+184: 
+185:   const goToPage = useCallback((pageId: string) => {
+186:     const scroller = scrollerRef.current;
+187:     const el = scroller?.querySelector<HTMLElement>(`#page-${CSS.escape(pageId)}`);
+188:     if (!scroller || !el) return;
+189:     const top =
+190:       el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+191:     scroller.scrollTo({ top: Math.max(0, top - 12), behavior: "smooth" });
+192:   }, []);
+193: 
+194:   /* --------------- preview click -> open editor section --------------- */
+195:   const onSelect = useCallback((focusId: string) => {
+196:     const section = focusId.split(":")[0] ?? "client";
+197:     setActiveSection(section);
+198:     if (section !== "client" && section !== "manager" && section !== "contact") {
+199:       setOpenKey(section);
+200:     }
+201:     const target =
+202:       editorRefs.current[section === "contact" ? "manager" : section] ?? editorRefs.current["client"];
+203:     target?.scrollIntoView({ behavior: "smooth", block: "center" });
+204:     setTimeout(() => setActiveSection(null), 2000);
+205:   }, []);
+206: 
+207:   const enabledCount = data.products.filter((p) => p.enabled).length;
+208:   const pageCount = enabledCount + 2;
+209: 
+210:   const grandTotal = useMemo(
+211:     () =>
+212:       data.products
+213:         .filter((p) => p.enabled)
+214:         .reduce((sum, p) => {
+215:           const explicit = Number(p.pricing.total);
+216:           return sum + (explicit > 0 ? explicit : computeTotal(p.pricing));
+217:         }, 0),
+218:     [data.products],
+219:   );
+220: 
+221:   const pages = useMemo(
+222:     () => [
+223:       { id: "cover", label: "Cover" },
+224:       ...data.products.filter((p) => p.enabled).map((p) => ({ id: p.key, label: PRODUCT_LABELS[p.key] })),
+225:       { id: "contact", label: "Terms & Contact" },
+226:     ],
+227:     [data.products],
+228:   );
+229: 
+230:   const patchProduct = (key: string, patch: Partial<Product>) =>
+231:     setData((d) => ({
+232:       ...d,
+233:       products: d.products.map((p) => (p.key === key ? { ...p, ...patch } : p)),
+234:     }));
+235: 
+236:   const setEditorRef = (key: string) => (el: HTMLElement | null) => {
+237:     editorRefs.current[key] = el;
+238:   };
+239: 
+240:   return (
+241:     <div className="min-h-screen bg-brand-grey">
+242:       <header className="no-print sticky top-0 z-30 border-b border-brand-line bg-white/85 backdrop-blur">
+243:         <div className="mx-auto grid max-w-[1600px] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3.5">
+244:           <div className="flex min-w-0 items-center gap-3">
+245:             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy text-sm font-bold text-white">
+246:               IS
+247:             </span>
+248:             <div className="min-w-0">
+249:               <h1 className="truncate text-sm font-semibold leading-tight text-navy">
+250:                 Immense Smart Solution
+251:               </h1>
+252:               <p className="truncate text-xs text-brand-ink/60">Quotation Management System</p>
+253:             </div>
+254:           </div>
+255:           <div className="flex items-center gap-4">
+256:             <div className="hidden text-right sm:block">
+257:               <p className="text-xs text-brand-ink/60">
+258:                 {enabledCount} products · {pageCount} pages
+259:               </p>
+260:               <p className="text-sm font-semibold text-navy">
+261:                 Grand Total ₹{" "}
+262:                 {grandTotal.toLocaleString("en-IN", { maximumFractionDigits: 2 })}
+263:               </p>
+264:             </div>
+265:             <button
+266:               type="button"
+267:               onClick={() => window.print()}
+268:               className="rounded-lg bg-navy px-5 py-2.5 text-sm font-semibold text-white shadow-panel transition-all hover:bg-navy-deep active:scale-[0.98]"
+269:             >
+270:               Generate PDF
+271:             </button>
+272:           </div>
+273:         </div>
+274:       </header>
+275: 
+276:       <div className="print-area-wrapper mx-auto grid max-w-[1600px] items-start gap-6 px-5 py-6 lg:grid-cols-[440px_minmax(0,1fr)]">
+277:         {/* -------- Editor -------- */}
+278:         <div className="no-print space-y-4">
+279:           <Card
+280:             title="Client Information"
+281:             subtitle="Appears on the proposal cover page"
+282:             innerRef={setEditorRef("client")}
+283:             active={activeSection === "client"}
+284:             right={<EyeButton title="Preview cover page" onClick={() => focusPreview("client:name")} />}
+285:           >
+286:             <div className="grid gap-3 sm:grid-cols-2">
+287:               <Field
+288:                 label="Client Name"
+289:                 value={data.client.clientName}
+290:                 onFocusPreview={() => focusPreview("client:name")}
+291:                 onChange={(v) => setData((d) => ({ ...d, client: { ...d.client, clientName: v } }))}
+292:               />
+293:               <Field
+294:                 label="Company Name"
+295:                 value={data.client.companyName}
+296:                 onFocusPreview={() => focusPreview("client:company")}
+297:                 onChange={(v) => setData((d) => ({ ...d, client: { ...d.client, companyName: v } }))}
+298:               />
+299:               <Field
+300:                 label="Proposal Number"
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
