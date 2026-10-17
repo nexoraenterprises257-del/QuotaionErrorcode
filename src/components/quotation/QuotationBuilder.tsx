@@ -130,15 +130,17 @@ export function QuotationBuilder({
     const apply = () => {
       // Guard against zero/collapsed dimensions when hidden
       if (el.clientWidth <= 100) return;
-      const availW = el.clientWidth - 48; // padding
-      const availH = el.clientHeight - 48;
+      const isMobile = el.clientWidth <= 640;
+      const pad = isMobile ? 16 : 48;
+      const availW = Math.max(80, el.clientWidth - pad);
+      const availH = Math.max(80, el.clientHeight - pad);
 
       if (zoom === "fit-width") {
-        setScale(Math.min(1.2, Math.max(0.35, availW / PAGE_W)));
+        setScale(Math.min(1.2, Math.max(0.2, availW / PAGE_W)));
       } else if (zoom === "fit-page") {
         const sw = availW / PAGE_W;
         const sh = availH / PAGE_H;
-        setScale(Math.min(1.2, Math.max(0.35, Math.min(sw, sh))));
+        setScale(Math.min(1.2, Math.max(0.2, Math.min(sw, sh))));
       } else {
         setScale(zoom);
       }
@@ -148,7 +150,7 @@ export function QuotationBuilder({
     const ro = new ResizeObserver(apply);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [zoom, activeProduct]);
+  }, [zoom, activeProduct, mobileTab]);
 
   /* Reset scroll and recalibrate scale on tab switch */
   useEffect(() => {
@@ -163,19 +165,21 @@ export function QuotationBuilder({
       const t = setTimeout(() => {
         const el = scrollerRef.current;
         if (!el || el.clientWidth <= 100) return;
-        const availW = el.clientWidth - 48;
-        const availH = el.clientHeight - 48;
+        const isMobile = el.clientWidth <= 640;
+        const pad = isMobile ? 16 : 48;
+        const availW = Math.max(80, el.clientWidth - pad);
+        const availH = Math.max(80, el.clientHeight - pad);
         if (zoom === "fit-width") {
-          setScale(Math.min(1.2, Math.max(0.35, availW / PAGE_W)));
+          setScale(Math.min(1.2, Math.max(0.2, availW / PAGE_W)));
         } else if (zoom === "fit-page") {
           const sw = availW / PAGE_W;
           const sh = availH / PAGE_H;
-          setScale(Math.min(1.2, Math.max(0.35, Math.min(sw, sh))));
+          setScale(Math.min(1.2, Math.max(0.2, Math.min(sw, sh))));
         }
       }, 60);
       return () => clearTimeout(t);
     }
-  }, [activeProduct, zoom]);
+  }, [activeProduct, zoom, mobileTab]);
 
   /* ---------------- Preview Navigation & Focus ---------------- */
   const scrollToPage = useCallback((pageId: string) => {
@@ -310,55 +314,55 @@ export function QuotationBuilder({
       {/* ===================================================================== */}
       {/*                              TOP BAR                                  */}
       {/* ===================================================================== */}
-      <header className="topbar no-print sticky top-0 shrink-0 bg-[#1e1b4b] text-white flex items-center justify-between px-3 sm:px-6 py-2.5 z-50 shadow-md">
-        <div className="flex items-center gap-3">
+      <header className="topbar no-print sticky top-0 shrink-0 bg-[#1e1b4b] text-white flex items-center justify-between px-2.5 sm:px-6 py-2 sm:py-2.5 z-50 shadow-md">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <img
             src="/nexora-logo.png"
             alt="Nexora Enterprise"
-            className="h-9 w-auto object-contain drop-shadow shrink-0"
+            className="h-7 sm:h-9 w-auto object-contain drop-shadow shrink-0"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = "/nexora-logo.png";
             }}
           />
-          <span className="text-lg font-bold tracking-tight text-white hidden lg:inline">
+          <span className="text-base sm:text-lg font-bold tracking-tight text-white hidden md:inline">
             Nexora <span className="gradient-text font-black">Enterprise</span>
           </span>
         </div>
 
         {/* 2-PRODUCT NAVIGATION SWITCHER */}
-        <div className="flex items-center bg-slate-900/90 p-1 rounded-xl border border-white/10 shadow-inner">
+        <div className="flex items-center bg-slate-900/90 p-0.5 sm:p-1 rounded-xl border border-white/10 shadow-inner">
           <button
             type="button"
             id="nav-quotation-builder-btn"
             onClick={() => handleProductSwitch("quotation")}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
               activeProduct === "quotation"
                 ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/30"
                 : "text-slate-300 hover:text-white hover:bg-white/5"
             }`}
           >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Quotation Builder</span>
+            <FileText className="w-3.5 h-3.5 shrink-0" />
+            <span><span className="hidden sm:inline">Quotation </span>Builder</span>
           </button>
           <button
             type="button"
             id="nav-sms-error-hub-btn"
             onClick={() => handleProductSwitch("errorHub")}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
               activeProduct === "errorHub"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/30"
                 : "text-slate-300 hover:text-white hover:bg-white/5"
             }`}
           >
-            <Zap className="w-3.5 h-3.5 text-amber-300" />
-            <span>SMS Error Hub</span>
-            <span className="text-[10px] bg-cyan-400/20 text-cyan-300 px-1.5 py-0.2 rounded-full font-mono font-bold">1212</span>
+            <Zap className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+            <span><span className="hidden sm:inline">SMS </span>Error Hub</span>
+            <span className="text-[9px] sm:text-[10px] bg-cyan-400/20 text-cyan-300 px-1.5 py-0.2 rounded-full font-mono font-bold hidden xs:inline">1212</span>
           </button>
         </div>
 
         {/* RIGHT SIDE ACTIONS */}
         {activeProduct === "quotation" ? (
-          <div className="flex items-center gap-3 sm:gap-5">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             <span className="text-xs font-semibold text-slate-300 hidden xl:inline" id="headerStats">
               {enabledCount} products · {pageCount} pages
             </span>
@@ -367,7 +371,7 @@ export function QuotationBuilder({
               type="button"
               onClick={resetDefaults}
               title="Reset to default Nexora proposal"
-              className="hidden sm:inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-700 transition cursor-pointer"
+              className="hidden lg:inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-700 transition cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset</span>
@@ -376,17 +380,17 @@ export function QuotationBuilder({
             <button
               type="button"
               onClick={exportPDF}
-              className="flex items-center gap-2 bg-slate-100 hover:bg-white text-slate-800 text-xs font-bold px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg transition cursor-pointer shadow-sm active:scale-95"
+              className="flex items-center gap-1.5 sm:gap-2 bg-slate-100 hover:bg-white text-slate-800 text-[11px] sm:text-xs font-bold px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg transition cursor-pointer shadow-sm active:scale-95 shrink-0"
             >
               <Printer className="w-3.5 h-3.5 text-indigo-700" />
-              <span>Export PDF</span>
+              <span><span className="hidden sm:inline">Export </span>PDF</span>
             </button>
           </div>
         ) : (
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-cyan-300 bg-cyan-950/60 border border-cyan-500/30 px-3 py-1 rounded-lg hidden sm:inline-flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-              1,212 SMS &amp; DLT Codes
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-[11px] sm:text-xs font-bold text-cyan-300 bg-cyan-950/60 border border-cyan-500/30 px-2 sm:px-3 py-1 rounded-lg flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              <span className="hidden sm:inline">1,212 </span>Codes
             </span>
           </div>
         )}
@@ -422,7 +426,7 @@ export function QuotationBuilder({
                 <Eye className="w-3.5 h-3.5 text-slate-500" />
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <label className="block">
                 <span className="field-label">Client Name</span>
                 <input
@@ -593,7 +597,7 @@ export function QuotationBuilder({
                         </label>
 
                         {p.tables.map((t, idx) => (
-                          <div className="grid grid-cols-2 gap-3" key={idx}>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3" key={idx}>
                             <label className="block">
                               <span className="field-label">{t.slabLabel} · Slab</span>
                               <input
@@ -625,7 +629,7 @@ export function QuotationBuilder({
                           <p className="field-label" style={{ marginBottom: "10px" }}>
                             Pricing (Optional)
                           </p>
-                          <div className="grid grid-cols-2 gap-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                             <label className="block">
                               <span className="field-label">Setup Charges (₹)</span>
                               <input
@@ -687,7 +691,7 @@ export function QuotationBuilder({
                 <Eye className="w-3.5 h-3.5 text-slate-500" />
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <label className="block">
                 <span className="field-label">Name</span>
                 <input
@@ -737,54 +741,51 @@ export function QuotationBuilder({
         {/* =================================================================== */}
         <div className={`right-panel ${mobileTab === "edit" ? "hidden md:flex" : "flex"}`}>
           {/* ZOOM BAR */}
-          <div className="zoom-bar no-print" id="zoomBtns">
-            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+          <div className="zoom-bar no-print flex items-center justify-between gap-1 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2" id="zoomBtns">
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <button
                 type="button"
-                className={`zoom-btn ${zoom === "fit-width" ? "active" : ""}`}
+                className={`zoom-btn text-[10px] sm:text-xs px-2 py-1 ${zoom === "fit-width" ? "active" : ""}`}
                 onClick={() => setZoom("fit-width")}
               >
                 Fit Width
               </button>
               <button
                 type="button"
-                className={`zoom-btn ${zoom === "fit-page" ? "active" : ""}`}
+                className={`zoom-btn text-[10px] sm:text-xs px-2 py-1 ${zoom === "fit-page" ? "active" : ""}`}
                 onClick={() => setZoom("fit-page")}
               >
                 Fit Page
               </button>
               <button
                 type="button"
-                className={`zoom-btn ${zoom === 0.5 ? "active" : ""}`}
+                className={`zoom-btn hidden sm:inline-block ${zoom === 0.5 ? "active" : ""}`}
                 onClick={() => setZoom(0.5)}
               >
                 50%
               </button>
               <button
                 type="button"
-                className={`zoom-btn ${zoom === 0.75 ? "active" : ""}`}
+                className={`zoom-btn hidden sm:inline-block ${zoom === 0.75 ? "active" : ""}`}
                 onClick={() => setZoom(0.75)}
               >
                 75%
               </button>
               <button
                 type="button"
-                className={`zoom-btn ${zoom === 1 ? "active" : ""}`}
+                className={`zoom-btn hidden sm:inline-block ${zoom === 1 ? "active" : ""}`}
                 onClick={() => setZoom(1)}
               >
                 100%
               </button>
 
-              <div className="h-4 w-px bg-slate-300 mx-1 hidden sm:block"></div>
+              <div className="h-4 w-px bg-slate-300 mx-0.5 hidden sm:block"></div>
 
               {/* JUMP TO PAGE DROPDOWN */}
-              <div className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200/80 border border-slate-300/80 rounded-lg px-2.5 py-1 transition">
-                <FileText className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wide hidden sm:inline">
-                  Page:
-                </span>
+              <div className="flex items-center gap-1 bg-slate-100 hover:bg-slate-200/80 border border-slate-300/80 rounded-lg px-2 py-0.5 transition">
+                <FileText className="w-3 h-3 text-indigo-600 shrink-0" />
                 <select
-                  className="bg-transparent text-xs font-bold text-slate-800 outline-none cursor-pointer pr-1"
+                  className="bg-transparent text-[10px] sm:text-xs font-bold text-slate-800 outline-none cursor-pointer max-w-[100px] sm:max-w-none pr-1 truncate"
                   value={selectedPage}
                   onChange={(e) => scrollToPage(e.target.value)}
                   title="Jump directly to page"
@@ -804,16 +805,18 @@ export function QuotationBuilder({
               </div>
             </div>
 
-            <span className="text-[10px] sm:text-xs font-semibold text-slate-600 shrink-0">
-              Grand Total: <span className="font-bold text-slate-800" id="grandTotalDisplay">₹ {grandTotalDisplay}</span>
+            <span className="text-[10px] sm:text-xs font-semibold text-slate-600 shrink-0 ml-auto pl-1">
+              ₹ <span className="font-bold text-slate-800" id="grandTotalDisplay">{grandTotalDisplay}</span>
             </span>
           </div>
 
           {/* PREVIEW SCROLLER */}
-          <div className="preview-scroll" id="previewScroller" ref={scrollerRef}>
+          <div className="preview-scroll w-full flex-1 flex flex-col items-center overflow-y-auto overflow-x-hidden" id="previewScroller" ref={scrollerRef}>
             <div
               id="pageStack"
+              className="flex flex-col items-center"
               style={{
+                width: `${PAGE_W}px`,
                 transform: `scale(${scale})`,
                 transformOrigin: "top center",
                 marginBottom: `${(scale - 1) * PAGE_H * pageCount}px`,

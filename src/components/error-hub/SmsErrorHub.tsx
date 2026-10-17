@@ -164,67 +164,67 @@ export function SmsErrorHub() {
 
       {/* Sub-Header / Hero Bar */}
       <div className="border-b border-slate-200/90 bg-white/90 backdrop-blur-md shadow-2xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 py-4 sm:py-7">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 sm:gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200/80 mb-3 shadow-2xs">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200/80 mb-2 sm:mb-3 shadow-2xs">
                 <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
                 Nexora Enterprise Bulk SMS &amp; DLT Intelligence Database
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+              <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
                 Find the Error.{" "}
                 <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
                   Fix it Faster.
                 </span>
               </h1>
-              <p className="mt-1.5 text-xs sm:text-sm max-w-2xl text-slate-600 leading-relaxed">
+              <p className="mt-1 text-xs sm:text-sm max-w-2xl text-slate-600 leading-relaxed">
                 Instant technical troubleshooting engine for Indian telecom DLT scrubbing, operator response codes (Jio, Vi, Airtel, SmartPing), and SMPP delivery receipts.
               </p>
             </div>
 
             {/* Quick Live Status Pill */}
             <div className="flex items-center gap-3 shrink-0">
-              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-bold text-slate-700 shadow-2xs">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <div className="flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] sm:text-xs font-bold text-slate-700 shadow-2xs">
+                <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600" />
                 <span>100% Offline &amp; Instant</span>
               </div>
             </div>
           </div>
 
           {/* Stats Counters */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            <div className="p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:shadow-xs transition">
-              <div className="text-2xl font-black text-indigo-700 font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mt-4 sm:mt-6">
+            <div className="p-3 sm:p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:shadow-xs transition">
+              <div className="text-xl sm:text-2xl font-black text-indigo-700 font-mono">
                 {ALL_ERRORS.length}
               </div>
-              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+              <div className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
                 SMS Error Codes
               </div>
             </div>
 
-            <div className="p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:shadow-xs transition">
-              <div className="text-2xl font-black text-purple-700 font-mono">
+            <div className="p-3 sm:p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:shadow-xs transition">
+              <div className="text-xl sm:text-2xl font-black text-purple-700 font-mono">
                 {OPERATORS.length - 1}
               </div>
-              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+              <div className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
                 Operators &amp; Protocols
               </div>
             </div>
 
-            <div className="p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:shadow-xs transition">
-              <div className="text-2xl font-black text-emerald-700 font-mono">
+            <div className="p-3 sm:p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:shadow-xs transition">
+              <div className="text-xl sm:text-2xl font-black text-emerald-700 font-mono">
                 &lt;1ms
               </div>
-              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+              <div className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
                 Instant Search
               </div>
             </div>
 
-            <div className="p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:shadow-xs transition">
-              <div className="text-2xl font-black text-blue-700 font-mono">
+            <div className="p-3 sm:p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:shadow-xs transition">
+              <div className="text-xl sm:text-2xl font-black text-blue-700 font-mono">
                 100%
               </div>
-              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+              <div className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
                 Local Database
               </div>
             </div>
@@ -233,20 +233,20 @@ export function SmsErrorHub() {
       </div>
 
       {/* Main Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 w-full flex-1">
+      <main className="max-w-7xl mx-auto px-3.5 sm:px-6 py-4 sm:py-6 w-full flex-1 pb-16">
         {/* Search Bar Wrapper */}
-        <div className="relative mb-5">
+        <div className="relative mb-4 sm:mb-5">
           <div className="relative rounded-2xl border-2 border-slate-200 bg-white focus-within:border-indigo-600 focus-within:ring-4 focus-within:ring-indigo-500/10 flex items-center shadow-xs transition-all">
-            <div className="pl-4 pr-2 text-indigo-600">
-              <Search className="w-5 h-5" />
+            <div className="pl-3.5 sm:pl-4 pr-2 text-indigo-600">
+              <Search className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <input
               ref={searchInputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search SMS error code, DLT status, or description... (e.g. 600, 20A, SMPP, throttled, timeout, DND)"
-              className="w-full py-3.5 pr-24 bg-transparent outline-none text-sm sm:text-base font-medium text-slate-900 placeholder:text-slate-400"
+              placeholder="Search error code or DLT status (e.g. 600, 20A, SMPP, DND)..."
+              className="w-full py-2.5 sm:py-3.5 pr-14 sm:pr-24 bg-transparent outline-none text-xs sm:text-base font-medium text-slate-900 placeholder:text-slate-400"
               spellCheck={false}
               autoComplete="off"
             />
@@ -271,14 +271,14 @@ export function SmsErrorHub() {
           </div>
 
           {/* Quick Search Pills */}
-          <div className="flex flex-wrap items-center gap-2 mt-3 text-xs">
-            <span className="font-bold text-slate-500">Popular:</span>
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-2.5 text-xs">
+            <span className="font-bold text-slate-500 text-[11px] sm:text-xs">Popular:</span>
             {POPULAR_SEARCHES.map((item) => (
               <button
                 key={item}
                 type="button"
                 onClick={() => setQuery(item)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold font-mono transition-all cursor-pointer border ${
+                className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[11px] sm:text-xs font-semibold font-mono transition-all cursor-pointer border ${
                   query === item
                     ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-xs"
                     : "bg-white border-slate-200/90 text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/40 shadow-2xs"
@@ -291,15 +291,15 @@ export function SmsErrorHub() {
         </div>
 
         {/* Filter Toolbar (Tabs & Target) */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 py-3.5 border-y border-slate-200/90 mb-6 bg-white/50 px-3 rounded-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-2.5 sm:py-3.5 border-y border-slate-200/90 mb-5 sm:mb-6 bg-white/50 px-3 rounded-xl">
           {/* Operator Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+          <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none w-full sm:w-auto">
             {OPERATORS.map((op) => (
               <button
                 key={op}
                 type="button"
                 onClick={() => setActiveCategory(op)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer whitespace-nowrap border ${
+                className={`px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition cursor-pointer whitespace-nowrap border shrink-0 ${
                   activeCategory === op
                     ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-xs"
                     : "bg-white border-slate-200/90 text-slate-700 hover:text-indigo-700 hover:bg-indigo-50/50 hover:border-indigo-200 shadow-2xs"
@@ -311,12 +311,12 @@ export function SmsErrorHub() {
           </div>
 
           {/* Search In Target Filter */}
-          <div className="flex items-center gap-2 shrink-0 self-end md:self-auto text-xs">
-            <span className="font-bold text-slate-500">Search In:</span>
+          <div className="flex items-center gap-2 shrink-0 text-xs self-start sm:self-auto">
+            <span className="font-bold text-slate-500 text-[11px] sm:text-xs">Search In:</span>
             <select
               value={targetField}
               onChange={(e) => setTargetField(e.target.value as any)}
-              className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold text-xs text-slate-800 outline-none cursor-pointer shadow-2xs focus:border-indigo-500"
+              className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-slate-300 bg-white font-semibold text-[11px] sm:text-xs text-slate-800 outline-none cursor-pointer shadow-2xs focus:border-indigo-500"
             >
               <option value="all">All Fields</option>
               <option value="code">Error Code Only</option>
